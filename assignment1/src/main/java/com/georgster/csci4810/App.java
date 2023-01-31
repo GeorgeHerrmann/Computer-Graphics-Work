@@ -31,7 +31,7 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public void brz(int x1, int y1, int x2, int y2, Group group) {
+    public void brz(int x1, int y1, int x2, int y2, GraphicsContext gc) {
         int dx = Math.abs(x2 - x1); // delta x
         int dy = Math.abs(y2 - y1); // delta y
         int sx = x1 < x2 ? 1 : -1; // sign x
@@ -41,7 +41,7 @@ public class App extends Application {
         if (dx > dy) { // slope < 1
             d = dx / 2; // decision variable
             for (x = x1, y = y1; x != x2; x += sx) { // loop until x = x2
-                group.getChildren().add(new Line(x, y, x, y)); // draw line
+                gc.strokeLine(x, y, x + 1, y + 1); // draw line
                 d -= dy; // subtract dy from decision variable
                 if (d < 0) { // if decision variable < 0
                     d += dx; // add dx to decision variable
@@ -51,7 +51,7 @@ public class App extends Application {
         } else { // slope >= 1
             d = dy / 2; // decision variable
             for (x = x1, y = y1; y != y2; y += sy) { // loop until y = y2
-                group.getChildren().add(new Line(x, y, x, y)); // draw line
+                gc.strokeLine(x, y, x + 1, y + 1); // draw line
                 d -= dx; // subtract dx from decision variable
                 if (d < 0) { // if decision variable < 0
                     d += dy; // add dy to decision variable
@@ -59,7 +59,7 @@ public class App extends Application {
                 }
             }
         }
-        group.getChildren().add(new Line(x2, y2, x2, y2)); // draw last line
+        gc.strokeLine(x2, y2, x2 + 1, y2 + 1); // draw last line
     }
 
     public static void basicAlg(GraphicsContext gc, int x0, int y0, int x1, int y1) {
@@ -94,7 +94,7 @@ public class App extends Application {
 
         Group root = new Group();
         Canvas canvas = new Canvas(500, 500);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        GraphicsContext gc = canvas.getGraphicsContext2D();st
 
         BasicStopwatch stopwatch = new BasicStopwatch();
         stopwatch.start();
@@ -120,7 +120,7 @@ public class App extends Application {
             int x1 = 500;
             int y1 = 500;*/
             basicAlg(gc, x0, y0, x1, y1);
-            //brz(x0, y0, x1, y1, root);
+            //brz(x0, y0, x1, y1, gc);
         }
 
         stopwatch.stop();
