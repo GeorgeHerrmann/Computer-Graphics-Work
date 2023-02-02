@@ -62,27 +62,38 @@ public class App extends Application {
         group.getChildren().add(new Line(x2, y2, x2, y2)); // draw last line
     }
 
-    public static void basicAlg(GraphicsContext gc, int x0, int y0, int x1, int y1) {
-        int dx = Math.abs(x1 - x0); // delta x
-        int dy = Math.abs(y1 - y0); // delta y
-        int sx = x0 < x1 ? 1 : -1; // sign x
-        int sy = y0 < y1 ? 1 : -1; // sign y
-        int err = dx - dy; // error
+    public static void Basic_alg(GraphicsContext gc, int x1, int y1, int x2, int y2) {
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+  
+        if (dx == 0) {
+            // Line is vertical, increment y coordinate
+            int yStart = Math.min(y1, y2);
+            int yEnd = Math.max(y1, y2);
+            for (int y = yStart; y <= yEnd; y++) {
+                gc.strokeLine(x1, y, x2, y);
+            }
+            return;
+        }
 
-        while (true) { // loop until x = x2 and y = y2
-            gc.strokeLine(x0, y0, x0 + 1, y0 + 1); // draw line
-            if (x0 == x1 && y0 == y1) {
-                break;
-            }
-            int e2 = 2 * err; // error * 2 represents the error at the next pixel
-            if (e2 > -dy) { // if error * 2 > -dy
-                err -= dy; // subtract dy from error
-                x0 += sx; // increment x by sign x
-            }
-            if (e2 < dx) { // if error * 2 < dx
-                err += dx; // add dx to error
-                y0 += sy; // increment y by sign y
-            }
+        float m = (float)dy / (float)dx;
+        float b = y1 - m * x1;
+
+        int x, y, xend;
+        if (dx < 0) {
+            x = x2;
+            y = y2;
+            xend = x1;
+        } else {
+            x = x1;
+            y = y1;
+            xend = x2;
+        }
+
+        while (x != xend) {
+            gc.strokeLine(x, y, x + 1, y + Math.round(m));
+            x++;
+            y = Math.round(m * x + b);
         }
     }
 
@@ -99,7 +110,12 @@ public class App extends Application {
         BasicStopwatch stopwatch = new BasicStopwatch();
         stopwatch.start();
 
+        root.getChildren().add(canvas);
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+
         for (int i = 0; i < n; i++) {
+            //Create random coordinates for a line
             int x0 = rand.nextInt(500);
             int y0 = rand.nextInt(500);
             int x1 = rand.nextInt(500);
@@ -119,17 +135,13 @@ public class App extends Application {
             int y0 = 0;
             int x1 = 500;
             int y1 = 500;*/
-            basicAlg(gc, x0, y0, x1, y1);
+            Basic_alg(gc, x0, y0, x1, y1);
             //brz(x0, y0, x1, y1, root);
         }
 
         stopwatch.stop();
 
         System.out.println("Time elapsed: " + stopwatch.getTimeElapsed() + " milliseconds");
-
-        root.getChildren().add(canvas);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
 
         input.close();
     }
