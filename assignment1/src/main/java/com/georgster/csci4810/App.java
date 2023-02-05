@@ -31,6 +31,7 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    //Bresenham's line algorithm
     public void brz(int x1, int y1, int x2, int y2, GraphicsContext gc) {
         int dx = Math.abs(x2 - x1); // delta x
         int dy = Math.abs(y2 - y1); // delta y
@@ -61,6 +62,29 @@ public class App extends Application {
         }
         gc.strokeLine(x2, y2, x2 + 1, y2 + 1); // draw last line
     }
+
+    public void brz2(GraphicsContext gc, int x0, int y0, int x1, int y1) {
+        int dx = Math.abs(x1 - x0);
+        int dy = Math.abs(y1 - y0);
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
+        int err = dx - dy;
+        int e2;
+    
+        while (true) {
+          gc.strokeLine(x0, y0, x0, y0);
+          if (x0 == x1 && y0 == y1) break;
+          e2 = err + err;
+          if (e2 > -dy) {
+            err = err - dy;
+            x0 = x0 + sx;
+          }
+          if (e2 < dx) {
+            err = err + dx;
+            y0 = y0 + sy;
+          }
+        }
+      }
 
     public static void Basic_alg(GraphicsContext gc, int x1, int y1, int x2, int y2) {
         int dx = x2 - x1;
@@ -108,11 +132,12 @@ public class App extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         BasicStopwatch stopwatch = new BasicStopwatch();
-        stopwatch.start();
 
         root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        stopwatch.start();
 
         for (int i = 0; i < n; i++) {
             //Create random coordinates for a line
@@ -120,23 +145,29 @@ public class App extends Application {
             int y0 = rand.nextInt(500);
             int x1 = rand.nextInt(500);
             int y1 = rand.nextInt(500);
-            //Create coordinates for a perfectly vertical line
+            //coordinates for a perfectly vertical line
             /*int x0 = 250;
             int y0 = 0;
             int x1 = 250;
             int y1 = 500;*/
-            //Create coordinates for a perfectly horizontal line
+            //coordinates for a perfectly horizontal line
             /*int x0 = 0;
             int y0 = 250;
             int x1 = 500;
             int y1 = 250;*/
-            //Create coordinates for a perfectly diagonal line
+            //coordinates for a perfectly diagonal line with a positive slope
             /*int x0 = 0;
             int y0 = 0;
             int x1 = 500;
             int y1 = 500;*/
+            //coordinates for a perfectly diagonal line with a negative slope
+            /*int x0 = 0;
+            int y0 = 500;
+            int x1 = 500;
+            int y1 = 0;*/
             Basic_alg(gc, x0, y0, x1, y1);
-            //brz(x0, y0, x1, y1, root);
+            //brz(x0, y0, x1, y1, gc);
+            //brz2(gc, x0, y0, x1, y1);
         }
 
         stopwatch.stop();
