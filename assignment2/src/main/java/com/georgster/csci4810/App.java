@@ -58,7 +58,6 @@ public class App extends Application {
                     isActive = false;
                 } else {
                     driver.execute(option);
-                    transformer.displayPixels();
                 }
             }
         });

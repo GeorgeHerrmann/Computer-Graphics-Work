@@ -249,7 +249,7 @@ public class Transformer2D {
 
     private void drawPoint(int x, int y) {
         Platform.runLater(() -> {
-            gc.strokeLine(Math.abs(x), Math.abs(y), Math.abs(x), Math.abs(y));
+            gc.strokeLine(x, y, x, y);
         });
     }
 
