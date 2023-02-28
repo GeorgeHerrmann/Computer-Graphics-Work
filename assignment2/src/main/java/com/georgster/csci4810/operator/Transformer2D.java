@@ -247,6 +247,12 @@ public class Transformer2D {
         }
     }
 
+    /**
+     * Draws a point on the GraphicsContext.
+     * 
+     * @param x The x value of the point
+     * @param y The y value of the point
+     */
     private void drawPoint(int x, int y) {
         Platform.runLater(() -> {
             gc.strokeLine(x, y, x, y);
@@ -263,6 +269,11 @@ public class Transformer2D {
         }
     }
 
+    /**
+     * Returns the lines of this transformer as a string.
+     * 
+     * @return The lines of this transformer as a string
+     */
     public String toString() {
         String s = "";
         for (Dataline line : lines) {

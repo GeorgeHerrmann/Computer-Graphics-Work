@@ -1,11 +1,21 @@
 package com.georgster.csci4810.util;
 
+/**
+ * A class to perform matrix operations.
+ */
 public class MatrixOperations {
     private MatrixOperations() {
         // Used to assist App.java for Matrix Operations, does not need to be instantiated
         throw new UnsupportedOperationException("Utility class.");
     }
     
+    /**
+     * Multiplies a NxN matrix by an NxM matrix.
+     * 
+     * @param matrix1 NxN matrix
+     * @param matrix2 NxM matrix
+     * @return 1xM matrix
+     */
     public static double[][] matrixMultiplication(double[][] matrix1, double[][] matrix2) {
         // Determine the dimensions of the matrices
         int m1Rows = matrix1.length;
@@ -36,6 +46,13 @@ public class MatrixOperations {
         return resultMatrix;
     }
 
+    /**
+     * Multiplies a NxN matrix by an NxM matrix.
+     * 
+     * @param matrix1 NxN matrix
+     * @param matrix2 NxM matrix
+     * @return 1xM matrix
+     */
     public static int[][] matrixMultiplication(int[][] matrix1, int[][] matrix2) {
         // Determine the dimensions of the matrices
         int m1Rows = matrix1.length;

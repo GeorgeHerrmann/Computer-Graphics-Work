@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * A driver for the Transformer2D class.
+ */
 public class TransformerDriver {
 
     private Scanner scanner;
@@ -11,6 +14,12 @@ public class TransformerDriver {
     private Map<String, DriverOptions> options = new HashMap<>();
     private DriverOptions option;
 
+    /**
+     * Constructs a new TransformerDriver.
+     *  
+     * @param scanner The scanner to use for user input.
+     * @param transformer The transformer to use for the driver.
+     */
     public TransformerDriver(Scanner scanner, Transformer2D transformer) {
         this.scanner = scanner;
         this.transformer = transformer;
@@ -25,6 +34,11 @@ public class TransformerDriver {
         options.put("exit", DriverOptions.EXIT);
     }
 
+    /**
+     * Prompts the user for input and sets the option to the corresponding DriverOption.
+     * 
+     * @param message The message to display to the user.
+     */
     public void prompt(String message) {
         System.out.println(message);
         String input = scanner.nextLine().toLowerCase();
@@ -35,10 +49,20 @@ public class TransformerDriver {
         }
     }
 
+    /**
+     * Gets the option that was set by the prompt method.
+     * 
+     * @return The option that was set by the prompt method.
+     */
     public DriverOptions getOption() {
         return option;
     }
 
+    /**
+     * Executes the option that was set by the prompt method.
+     * 
+     * @param option The option to execute.
+     */
     public void execute(DriverOptions option) {
         switch (option) {
             case INPUTLINES:
