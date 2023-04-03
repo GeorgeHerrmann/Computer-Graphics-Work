@@ -1,0 +1,11 @@
+package com.georgster.csci4810.operator;
+
+/**
+ * An enum to represent the options available to the user.
+ */
+public enum DriverOptions {
+    TRANSLATE,
+    SCALE,
+    ROTATE,
+    EXIT
+}
