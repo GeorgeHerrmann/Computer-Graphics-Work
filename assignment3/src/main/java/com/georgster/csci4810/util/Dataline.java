@@ -1,130 +1,130 @@
 package com.georgster.csci4810.util;
 
 /**
- * A class to represent the starting and ending points of a line.
+ * A class to represent the starting and ending podoubles of a line.
  */
 public class Dataline {
-    private int x1;
-    private int x2;
-    private int y1;
-    private int y2;
-    private int z1;
-    private int z2;
-    private int[] start;
-    private int[] end;
+    private double x1;
+    private double x2;
+    private double y1;
+    private double y2;
+    private double z1;
+    private double z2;
+    private double[] start;
+    private double[] end;
 
     /**
-     * Creates a new Dataline with the given starting and ending points.
+     * Creates a new Dataline with the given starting and ending podoubles.
      * 
-     * @param x1 The x coordinate of the starting point
-     * @param y1 The y coordinate of the starting point
-     * @param x2 The x coordinate of the ending point
-     * @param y2 The y coordinate of the ending point
+     * @param x1 The x coordinate of the starting podouble
+     * @param y1 The y coordinate of the starting podouble
+     * @param x2 The x coordinate of the ending podouble
+     * @param y2 The y coordinate of the ending podouble
      */
-    public Dataline(int x1, int y1, int x2, int y2, int z1, int z2) {
+    public Dataline(double x1, double y1, double x2, double y2, double z1, double z2) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
         this.y2 = y2;
         this.z1 = z1;
         this.z2 = z2;
-        this.start = new int[] { x1, y1, z1, 1 };
-        this.end = new int[] { x2, y2, z2, 1 };
+        this.start = new double[] { x1, y1, z1, 1 };
+        this.end = new double[] { x2, y2, z2, 1 };
     }
 
     /**
-     * Returns the x coordinate of the starting point.
+     * Returns the x coordinate of the starting podouble.
      * 
-     * @return The x coordinate of the starting point
+     * @return The x coordinate of the starting podouble
      */
-    public int getX1() {
+    public double getX1() {
         return x1;
     }
 
     /**
-     * Sets the x coordinate of the starting point.
+     * Sets the x coordinate of the starting podouble.
      * 
-     * @param x1 The x coordinate of the starting point
+     * @param x1 The x coordinate of the starting podouble
      */
-    public void setX1(int x1) {
+    public void setX1(double x1) {
         this.x1 = x1;
         this.start[0] = x1;
     }
 
     /**
-     * Returns the x coordinate of the ending point.
+     * Returns the x coordinate of the ending podouble.
      * 
-     * @return The x coordinate of the ending point
+     * @return The x coordinate of the ending podouble
      */
-    public int getX2() {
+    public double getX2() {
         return x2;
     }
 
     /**
-     * Sets the x coordinate of the ending point.
+     * Sets the x coordinate of the ending podouble.
      * 
-     * @param x2 The x coordinate of the ending point
+     * @param x2 The x coordinate of the ending podouble
      */
-    public void setX2(int x2) {
+    public void setX2(double x2) {
         this.x2 = x2;
         this.end[0] = x2;
     }
 
     /**
-     * Returns the y coordinate of the starting point.
+     * Returns the y coordinate of the starting podouble.
      * 
-     * @return The y coordinate of the starting point
+     * @return The y coordinate of the starting podouble
      */
-    public int getY1() {
+    public double getY1() {
         return y1;
     }
 
     /**
-     * Sets the y coordinate of the starting point.
+     * Sets the y coordinate of the starting podouble.
      * 
-     * @param y1 The y coordinate of the starting point
+     * @param y1 The y coordinate of the starting podouble
      */
-    public void setY1(int y1) {
+    public void setY1(double y1) {
         this.y1 = y1;
         this.start[1] = y1;
     }
 
     /**
-     * Returns the y coordinate of the ending point.
+     * Returns the y coordinate of the ending podouble.
      * 
-     * @return The y coordinate of the ending point
+     * @return The y coordinate of the ending podouble
      */
-    public int getY2() {
+    public double getY2() {
         return y2;
     }
 
     /**
-     * Sets the y coordinate of the ending point.
+     * Sets the y coordinate of the ending podouble.
      * 
-     * @param y2 The y coordinate of the ending point
+     * @param y2 The y coordinate of the ending podouble
      */
-    public void setY2(int y2) {
+    public void setY2(double y2) {
         this.y2 = y2;
         this.end[1] = y2;
     }
 
     /**
-     * Returns the starting point as a 1x3 array in
+     * Returns the starting podouble as a 1x3 array in
      * the form [x, y, 1].
      * 
-     * @return The starting point as a 1x3 array
+     * @return The starting podouble as a 1x3 array
      */
-    public int[] getStart() {
+    public double[] getStart() {
         return start;
     }
 
     /**
-     * Sets the starting point as a 1x3 array in
+     * Sets the starting podouble as a 1x3 array in
      * the form [x, y, 1].
      * 
-     * @param start The starting point as a 1x3 array
+     * @param start The starting podouble as a 1x3 array
      */
-    public void setStart(int[] start) {
+    public void setStart(double[] start) {
         this.start = start;
         this.x1 = start[0];
         this.y1 = start[1];
@@ -132,22 +132,22 @@ public class Dataline {
     }
 
     /**
-     * Returns the ending point as a 1x3 array in
+     * Returns the ending podouble as a 1x3 array in
      * the form [x, y, 1].
      * 
-     * @return The ending point as a 1x3 array
+     * @return The ending podouble as a 1x3 array
      */
-    public int[] getEnd() {
+    public double[] getEnd() {
         return end;
     }
 
     /**
-     * Sets the ending point as a 1x3 array in
+     * Sets the ending podouble as a 1x3 array in
      * the form [x, y, 1].
      * 
-     * @param end The ending point as a 1x3 array
+     * @param end The ending podouble as a 1x3 array
      */
-    public void setEnd(int[] end) {
+    public void setEnd(double[] end) {
         this.end = end;
         this.x2 = end[0];
         this.y2 = end[1];
@@ -155,39 +155,39 @@ public class Dataline {
     }
 
     /**
-     * Returns the z coordinate of the starting point.
+     * Returns the z coordinate of the starting podouble.
      * 
-     * @return The z coordinate of the starting point
+     * @return The z coordinate of the starting podouble
      */
-    public int getZ1() {
+    public double getZ1() {
         return z1;
     }
 
     /**
-     * Sets the z coordinate of the starting point.
+     * Sets the z coordinate of the starting podouble.
      * 
-     * @param z1 The z coordinate of the starting point
+     * @param z1 The z coordinate of the starting podouble
      */
-    public void setZ1(int z1) {
+    public void setZ1(double z1) {
         this.z1 = z1;
         this.start[2] = z1;
     }
 
     /**
-     * Returns the z coordinate of the ending point.
+     * Returns the z coordinate of the ending podouble.
      * 
-     * @return The z coordinate of the ending point
+     * @return The z coordinate of the ending podouble
      */
-    public int getZ2() {
+    public double getZ2() {
         return z2;
     }
 
     /**
-     * Sets the z coordinate of the ending point.
+     * Sets the z coordinate of the ending podouble.
      * 
-     * @param z2 The z coordinate of the ending point
+     * @param z2 The z coordinate of the ending podouble
      */
-    public void setZ2(int z2) {
+    public void setZ2(double z2) {
         this.z2 = z2;
         this.end[2] = z2;
     }
@@ -199,6 +199,6 @@ public class Dataline {
      */
     @Override
     public String toString() {
-        return "x1: " + x1 + " y1: " + y1 + " x2: " + x2 + " y2: " + y2;
+        return "Dataline [x1=" + x1 + ", x2=" + x2 + ", y1=" + y1 + ", y2=" + y2 + ", z1=" + z1 + ", z2=" + z2 + "]";
     }
 }

@@ -46,6 +46,24 @@ public class MatrixOperations {
         return resultMatrix;
     }
 
+    public static double[] matrixMultiplication(double[] matrix1, double[][] matrix2) {
+        int numRows = matrix2.length;
+        int numCols = matrix2[0].length;
+        double[] result = new double[numCols];
+        
+        if (matrix1.length != numRows) {
+            throw new IllegalArgumentException("Invalid matrix dimensions");
+        }
+        
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                result[j] += matrix1[i] * matrix2[i][j];
+            }
+        }
+        
+        return result;
+    }
+
     /**
      * Multiplies a NxN matrix by an NxM matrix.
      * 
