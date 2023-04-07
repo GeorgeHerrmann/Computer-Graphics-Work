@@ -59,14 +59,19 @@ public class Transformer3D {
         return Math.tan(theta/2);
     }
 
+    public void applyTranslation(double tx, double ty, double tz) {
+        double[][] translationMatrix = new double[][]{
+            {1, 0, 0, 0},
+            {0, 1, 0, 0},
+            {0, 0, 1, 0},
+            {tx, ty, tz, 1}
+        };
+
+        datalines = applyTransformation(translationMatrix);
+    }
+
     public void transformPoints() {
         Platform.runLater(() -> gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight()));
-        double[][] temp = getTransformationMatrix();
-        System.out.println(Arrays.toString(temp[0]));
-        System.out.println(Arrays.toString(temp[1]));
-        System.out.println(Arrays.toString(temp[2]));
-        System.out.println(Arrays.toString(temp[3]));
-        System.out.println("---------------------");
         for (Dataline line : applyTransformation(getTransformationMatrix())) {
             System.out.println("3D: " + line.toString());
             Dataline2D dataline2d = new Dataline2D(0, 0, 0, 0);
@@ -129,7 +134,18 @@ public class Transformer3D {
     }
 
     private double[][] getTransformationMatrix() {
-        return MatrixOperations.matrixMultiplication(getVMatrix(), getNMatrix());
+        double[][] matrix = MatrixOperations.matrixMultiplication(getVMatrix(), getNMatrix());
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (j == 2) {
+                    matrix[i][j] *= -1;
+                }
+                BigDecimal bd2 = BigDecimal.valueOf(matrix[i][j]);
+                bd2 = bd2.setScale(1, RoundingMode.HALF_UP);
+                matrix[i][j] = bd2.doubleValue();
+            }
+        }
+        return matrix;
     }
 
     private double[][] getVMatrix() {
@@ -201,7 +217,7 @@ public class Transformer3D {
     private List<Dataline> applyTransformation(double[][] matrix) {
         List<Dataline> transformedPoints = new ArrayList<>();
         for (Dataline line : datalines) {
-            Dataline newLine = new Dataline(0, 0, 0, 0, 0, 0);
+            Dataline newLine = new Dataline(0, 0, 0, 0, 0, 0, line.getTag());
             newLine.setStart(MatrixOperations.matrixMultiplication(line.getStart(), matrix));
             newLine.setEnd(MatrixOperations.matrixMultiplication(line.getEnd(), matrix));
             transformedPoints.add(newLine);

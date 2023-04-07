@@ -80,34 +80,43 @@ public class App extends Application {
         final double screenSize = 30;
         final double screenDistance = 60;
 
+        runDaemon(() -> {
         Transformer3D transformer = new Transformer3D(gc, viewpoint, zPlane, screenSize, screenDistance);
 
         Dataline[] lines = {
-            new Dataline(-1, 1, -1, 1, 1, -1), // AB
-            new Dataline(1, 1, -1, 1, -1, -1), // BC
-            new Dataline(1, -1, -1, -1, -1, -1), // CD
-            new Dataline(-1, -1, -1, -1, 1, -1), // DA
-            new Dataline(-1, 1, 1, 1, 1, 1), // EF
-            new Dataline(1, 1, 1, 1, -1, 1), // FG
-            new Dataline(1, -1, 1, -1, -1, 1), // GH
-            new Dataline(-1, -1, 1, -1, 1, 1), // HE
-            new Dataline(-1, 1, -1, -1, 1, 1), // AE
-            new Dataline(1, 1, -1, 1, 1, 1), // BF
-            new Dataline(1, -1, -1, 1, -1, 1), // CG
-            new Dataline(-1, -1, -1, -1, -1, 1) // DH
+            new Dataline(-1, 1, -1, 1, 1, -1, "AB"), // AB
+            new Dataline(1, 1, -1, 1, -1, -1, "BC"), // BC
+            new Dataline(1, -1, -1, -1, -1, -1, "CD"), // CD
+            new Dataline(-1, -1, -1, -1, 1, -1, "DA"), // DA
+            new Dataline(-1, 1, 1, 1, 1, 1, "EF"), // EF
+            new Dataline(1, 1, 1, 1, -1, 1, "FG"), // FG
+            new Dataline(1, -1, 1, -1, -1, 1, "GH"), // GH
+            new Dataline(-1, -1, 1, -1, 1, 1, "HE"), // HE
+            new Dataline(-1, 1, -1, -1, 1, 1, "AE"), // AE
+            new Dataline(1, 1, -1, 1, 1, 1, "BF"), // BF
+            new Dataline(1, -1, -1, 1, -1, 1, "CG"), // CG
+            new Dataline(-1, -1, -1, -1, -1, 1, "DH") // DH
         };
         
+
         for (Dataline line : lines) {
             transformer.addDataline(line);
         }
-
         transformer.transformPoints();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
+        transformer.applyTranslation(1, 1, 0);
+        transformer.transformPoints();
+    });
 
         // animate the box rotation
         root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

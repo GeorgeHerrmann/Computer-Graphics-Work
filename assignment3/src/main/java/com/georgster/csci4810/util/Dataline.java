@@ -12,6 +12,7 @@ public class Dataline {
     private double z2;
     private double[] start;
     private double[] end;
+    private String tag;
 
     /**
      * Creates a new Dataline with the given starting and ending podoubles.
@@ -21,7 +22,7 @@ public class Dataline {
      * @param x2 The x coordinate of the ending podouble
      * @param y2 The y coordinate of the ending podouble
      */
-    public Dataline(double x1, double y1, double x2, double y2, double z1, double z2) {
+    public Dataline(double x1, double y1, double z1, double x2, double y2, double z2, String tag) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -30,6 +31,7 @@ public class Dataline {
         this.z2 = z2;
         this.start = new double[] { x1, y1, z1, 1 };
         this.end = new double[] { x2, y2, z2, 1 };
+        this.tag = tag;
     }
 
     /**
@@ -192,6 +194,10 @@ public class Dataline {
         this.end[2] = z2;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     /**
      * Returns a string representation of the Dataline.
      * 
@@ -199,6 +205,6 @@ public class Dataline {
      */
     @Override
     public String toString() {
-        return "Dataline [x1=" + x1 + ", x2=" + x2 + ", y1=" + y1 + ", y2=" + y2 + ", z1=" + z1 + ", z2=" + z2 + "]";
+        return tag + " [x1=" + x1 + ", x2=" + x2 + ", y1=" + y1 + ", y2=" + y2 + ", z1=" + z1 + ", z2=" + z2 + "]";
     }
 }
