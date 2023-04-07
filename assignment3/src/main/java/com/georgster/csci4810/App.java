@@ -1,20 +1,12 @@
 package com.georgster.csci4810;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +14,7 @@ import java.util.Scanner;
 
 import com.georgster.csci4810.operator.DriverOptions;
 import com.georgster.csci4810.operator.Transformer3D;
+import com.georgster.csci4810.operator.Transformer3DDriver;
 import com.georgster.csci4810.util.Dataline;
 
 /**
@@ -42,35 +35,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        /*Scanner input = new Scanner(System.in);
-        Group root = new Group();
-        Canvas canvas = new Canvas(1280, 720);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        root.getChildren().add(canvas);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-        Transformer2D transformer = new Transformer2D(gc);
-        TransformerDriver driver = new TransformerDriver(input, transformer);
-
-        runDaemon(() -> {
-            boolean isActive = true;
-            while (isActive) {
-                System.out.println("Valid commands are: input, output, display, translate, basicrotate, basicscale, scale, rotate, exit");
-                driver.prompt("Enter a command:");
-                DriverOptions option = driver.getOption();
-
-                if (option == null) {
-                    System.out.println("Invalid command.");
-                } else if (option == DriverOptions.EXIT) {
-                    isActive = false;
-                } else {
-                    driver.execute(option);
-                }
-            }
-        });*/
-
-        // Create a new PerspectiveCamera object and set its position and orientation to the desired values. In this case, the position is (6, 8, 7.5) and the viewing axis, Ze, is pointed directly at the origin of the WCS with the Xe-axis lying on the Z=7.5 plane.
         Group root = new Group();
         Canvas canvas = new Canvas(1024, 1024);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -81,39 +46,46 @@ public class App extends Application {
         final double screenDistance = 60;
 
         runDaemon(() -> {
-        Transformer3D transformer = new Transformer3D(gc, viewpoint, zPlane, screenSize, screenDistance);
+            Transformer3D transformer = new Transformer3D(gc, viewpoint, zPlane, screenSize, screenDistance);
+            Transformer3DDriver driver = new Transformer3DDriver(new Scanner(System.in), transformer);
 
-        Dataline[] lines = {
-            new Dataline(-1, 1, -1, 1, 1, -1, "AB"), // AB
-            new Dataline(1, 1, -1, 1, -1, -1, "BC"), // BC
-            new Dataline(1, -1, -1, -1, -1, -1, "CD"), // CD
-            new Dataline(-1, -1, -1, -1, 1, -1, "DA"), // DA
-            new Dataline(-1, 1, 1, 1, 1, 1, "EF"), // EF
-            new Dataline(1, 1, 1, 1, -1, 1, "FG"), // FG
-            new Dataline(1, -1, 1, -1, -1, 1, "GH"), // GH
-            new Dataline(-1, -1, 1, -1, 1, 1, "HE"), // HE
-            new Dataline(-1, 1, -1, -1, 1, 1, "AE"), // AE
-            new Dataline(1, 1, -1, 1, 1, 1, "BF"), // BF
-            new Dataline(1, -1, -1, 1, -1, 1, "CG"), // CG
-            new Dataline(-1, -1, -1, -1, -1, 1, "DH") // DH
-        };
-        
+            Dataline[] lines = {
+                new Dataline(-1, 1, -1, 1, 1, -1, "AB"), // AB
+                new Dataline(1, 1, -1, 1, -1, -1, "BC"), // BC
+                new Dataline(1, -1, -1, -1, -1, -1, "CD"), // CD
+                new Dataline(-1, -1, -1, -1, 1, -1, "DA"), // DA
+                new Dataline(-1, 1, 1, 1, 1, 1, "EF"), // EF
+                new Dataline(1, 1, 1, 1, -1, 1, "FG"), // FG
+                new Dataline(1, -1, 1, -1, -1, 1, "GH"), // GH
+                new Dataline(-1, -1, 1, -1, 1, 1, "HE"), // HE
+                new Dataline(-1, 1, -1, -1, 1, 1, "AE"), // AE
+                new Dataline(1, 1, -1, 1, 1, 1, "BF"), // BF
+                new Dataline(1, -1, -1, 1, -1, 1, "CG"), // CG
+                new Dataline(-1, -1, -1, -1, -1, 1, "DH") // DH
+            };
+            
 
-        for (Dataline line : lines) {
-            transformer.addDataline(line);
-        }
-        transformer.transformPoints();
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            e.printStackTrace();
-        }
-        transformer.applyTranslation(1, 1, 0);
-        transformer.transformPoints();
-    });
+            for (Dataline line : lines) {
+                transformer.addDataline(line);
+            }
+            transformer.transformPoints();
+            boolean isActive = true;
+            while (isActive) {
+                System.out.println("Valid commands are: translate, rotate, scale, and exit");
+                driver.prompt("Enter a command:");
+                DriverOptions option = driver.getOption();
 
-        // animate the box rotation
+                if (option == null) {
+                    System.out.println("Invalid command.");
+                } else if (option == DriverOptions.EXIT) {
+                    isActive = false;
+                } else {
+                    driver.execute(option);
+                    transformer.transformPoints();
+                }
+            }
+        });
+
         root.getChildren().add(canvas);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

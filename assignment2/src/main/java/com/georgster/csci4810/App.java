@@ -1,20 +1,21 @@
 package com.georgster.csci4810;
 
+import java.io.IOException;
+import java.util.Scanner;
+
+import javax.swing.GroupLayout.Group;
+
+import com.georgster.csci4810.operator.DriverOptions;
+import com.georgster.csci4810.operator.Transformer2D;
+import com.georgster.csci4810.operator.TransformerDriver;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Scanner;
-
-import com.georgster.csci4810.operator.DriverOptions;
-import com.georgster.csci4810.operator.Transformer2D;
-import com.georgster.csci4810.operator.TransformerDriver;
 
 /**
  * JavaFX App
@@ -48,7 +49,7 @@ public class App extends Application {
         runDaemon(() -> {
             boolean isActive = true;
             while (isActive) {
-                System.out.println("Valid commands are: input, output, display, translate, basicrotate, basicscale, scale, rotate, exit");
+                System.out.println("Valid commands are: translate, scale, rotate, and exit");
                 driver.prompt("Enter a command:");
                 DriverOptions option = driver.getOption();
 

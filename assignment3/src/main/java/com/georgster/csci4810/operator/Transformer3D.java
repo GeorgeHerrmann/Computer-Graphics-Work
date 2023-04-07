@@ -3,7 +3,6 @@ package com.georgster.csci4810.operator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.georgster.csci4810.util.Dataline;
@@ -13,6 +12,9 @@ import com.georgster.csci4810.util.MatrixOperations;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * A class to transform 3D objects using perspective projection.
+ */
 public class Transformer3D {
     private GraphicsContext gc;
     private List<Dataline> datalines;
@@ -25,6 +27,15 @@ public class Transformer3D {
     private double v;
     private static int n = 1024;
 
+    /**
+     * Creates a new Transformer3D which will draw to the given GraphicsContext.
+     * 
+     * @param gc The GraphicsContext to draw to.
+     * @param viewpoint The viewpoint of the camera.
+     * @param zPlane The z-plane of the camera.
+     * @param screenSize The size of the screen.
+     * @param screenDistance The distance from the screen to the camera.
+     */
     public Transformer3D(GraphicsContext gc, double[] viewpoint, double zPlane, double screenSize, double screenDistance) {
         this.gc = gc;
         this.viewpoint = viewpoint;
@@ -33,32 +44,47 @@ public class Transformer3D {
         this.screenDistance = screenDistance;
         datalines = new ArrayList<>();
         
-        v = 511.5;
+        v = n / 2.0; // n is the size of our viewport
         xe = calculateXe();
         ye = calculateYe();
-
-        System.out.println("v: " + v);
-        System.out.println("xe: " + xe);
-        System.out.println("ye: " + ye);
     }
 
+    /**
+     * Adds a dataline to this Transformer. The line will be projected once
+     * {@code transformPoints()} is called and can be manipulated using any
+     * transformation methods.
+     * 
+     * @param dataline The dataline to add.
+     */
     public void addDataline(Dataline dataline) {
         datalines.add(dataline);
     }
 
+    /**
+     * Calculates the Xe value.
+     * 
+     * @return The Xe value.
+     */
     private double calculateXe() {
         return (screenSize / 2) * (1 + (viewpoint[0] / zPlane));
     }
 
+    /**
+     * Calculates the Ye value.
+     * 
+     * @return The Ye value.
+     */
     private double calculateYe() {
         return (screenSize / 2) * (1 + (viewpoint[1] / zPlane));
     }
 
-    private double calculateVValue() {
-        double theta = 2 * Math.atan(screenSize / (2 * screenDistance));
-        return Math.tan(theta/2);
-    }
-
+    /**
+     * Applies a 3D translation to the datalines.
+     * 
+     * @param tx The x translation factor.
+     * @param ty The y translation factor.
+     * @param tz The z translation factor.
+     */
     public void applyTranslation(double tx, double ty, double tz) {
         double[][] translationMatrix = new double[][]{
             {1, 0, 0, 0},
@@ -70,10 +96,71 @@ public class Transformer3D {
         datalines = applyTransformation(translationMatrix);
     }
 
+    /**
+     * Applies a 3D scale to the datalines.
+     * 
+     * @param sx The x scale factor.
+     * @param sy The y scale factor.
+     * @param sz The z scale factor.
+     */
+    public void applyScale(double sx, double sy, double sz) {
+        double[][] scaleMatrix = new double[][]{
+            {sx, 0, 0, 0},
+            {0, sy, 0, 0},
+            {0, 0, sz, 0},
+            {0, 0, 0, 1}
+        };
+
+        datalines = applyTransformation(scaleMatrix);
+    }
+
+    /**
+     * Applies a 3D rotation to the datalines.
+     * 
+     * @param axis The axis to rotate around, either "x", "y", or "z".
+     * @param angle The angle to rotate by.
+     * @throws IllegalArgumentException If the axis is invalid.
+     */
+    public void applyRotation(String axis, double angle) throws IllegalArgumentException {
+        double[][] rotationMatrix;
+        switch (axis) {
+            case "x":
+                rotationMatrix = new double[][]{
+                    {1, 0, 0, 0},
+                    {0, Math.cos(angle), Math.sin(angle), 0},
+                    {0, -Math.sin(angle), Math.cos(angle), 0},
+                    {0, 0, 0, 1}
+                };
+                break;
+            case "y":
+                rotationMatrix = new double[][]{
+                    {Math.cos(angle), 0, -Math.sin(angle), 0},
+                    {0, 1, 0, 0},
+                    {Math.sin(angle), 0, Math.cos(angle), 0},
+                    {0, 0, 0, 1}
+                };
+                break;
+            case "z":
+                rotationMatrix = new double[][]{
+                    {Math.cos(angle), Math.sin(angle), 0, 0},
+                    {-Math.sin(angle), Math.cos(angle), 0, 0},
+                    {0, 0, 1, 0},
+                    {0, 0, 0, 1}
+                };
+                break;
+            default: // Invalid axis
+                throw new IllegalArgumentException("Invalid axis: " + axis);
+        }
+
+        datalines = applyTransformation(rotationMatrix);
+    }
+
+    /**
+     * Applies perspective projection to the datalines and draws them to the GraphicsContext.
+     */
     public void transformPoints() {
         Platform.runLater(() -> gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight()));
         for (Dataline line : applyTransformation(getTransformationMatrix())) {
-            System.out.println("3D: " + line.toString());
             Dataline2D dataline2d = new Dataline2D(0, 0, 0, 0);
 
             double x = (double) line.getX1();
@@ -93,8 +180,6 @@ public class Transformer3D {
             ys = (int) Math.round(((y / z) * v) + v);
 
             dataline2d.setEnd(new int[]{xs, ys, 1});
-
-            System.out.println("2D: " + dataline2d.toString());
 
             brz2(dataline2d);
         }
@@ -133,6 +218,11 @@ public class Transformer3D {
         }
     }
 
+    /**
+     * Calculates and returns the overall transformation matrix for this 3D Transformer.
+     * 
+     * @return The transformation matrix.
+     */
     private double[][] getTransformationMatrix() {
         double[][] matrix = MatrixOperations.matrixMultiplication(getVMatrix(), getNMatrix());
         for (int i = 0; i < matrix.length; i++) {
@@ -148,6 +238,11 @@ public class Transformer3D {
         return matrix;
     }
 
+    /**
+     * Calculates and returns the V matrix for this 3D Transformer.
+     * 
+     * @return The V matrix.
+     */
     private double[][] getVMatrix() {
         double[][] t1 = {
             {1, 0, 0, 0},
@@ -173,8 +268,6 @@ public class Transformer3D {
         BigDecimal bd2 = BigDecimal.valueOf(magnitude2);
         bd2 = bd2.setScale(1, RoundingMode.HALF_UP);
         magnitude2 = bd2.doubleValue() - 0.1;
-
-        System.out.println("magnitude1: " + magnitude1 + ", magnitude2: " + magnitude2);
 
         double[][] t3 = {
             {-magnitude1, 0, magnitude2, 0},
@@ -204,6 +297,11 @@ public class Transformer3D {
         return MatrixOperations.matrixMultiplication(matrix3, t5);
     }
 
+    /**
+     * Returns the N matrix for this 3D Transformer.
+     * 
+     * @return The N matrix.
+     */
     private double[][] getNMatrix() {
         double side = screenSize / 2;
         return new double[][] {
@@ -214,6 +312,13 @@ public class Transformer3D {
         };
     }
 
+    /**
+     * Applies the given transformation matrix to the points of this 3D Transformer.
+     * The points will not be projected until {@code transformPoints()} is called.
+     * 
+     * @param matrix The transformation matrix to apply.
+     * @return The transformed points.
+     */
     private List<Dataline> applyTransformation(double[][] matrix) {
         List<Dataline> transformedPoints = new ArrayList<>();
         for (Dataline line : datalines) {
@@ -225,9 +330,13 @@ public class Transformer3D {
         return transformedPoints;
     }
 
+    /**
+     * Draws the given point on the GraphicsContext.
+     * 
+     * @param x The x coordinate of the point.
+     * @param y The y coordinate of the point.
+     */
     private void drawPoint(int x, int y) {
-        Platform.runLater(() -> {
-            gc.strokeLine(x, y, x, y);
-        });
+        Platform.runLater(() -> gc.strokeLine(x, y, x, y));
     }
 }
