@@ -16,6 +16,7 @@ import com.georgster.csci4810.operator.DriverOptions;
 import com.georgster.csci4810.operator.Transformer3D;
 import com.georgster.csci4810.operator.Transformer3DDriver;
 import com.georgster.csci4810.util.Dataline;
+import com.georgster.csci4810.util.DatalineShapes;
 
 /**
  * JavaFX App
@@ -37,7 +38,8 @@ public class App extends Application {
     public void start(Stage primaryStage) {
 
         Group root = new Group();
-        Canvas canvas = new Canvas(1024, 1024);
+        int n = 1024;
+        Canvas canvas = new Canvas(n, n);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         final double[] viewpoint = {6, 8, 7.5};
@@ -46,26 +48,11 @@ public class App extends Application {
         final double screenDistance = 60;
 
         runDaemon(() -> {
-            Transformer3D transformer = new Transformer3D(gc, viewpoint, zPlane, screenSize, screenDistance);
+            Transformer3D transformer = new Transformer3D(gc, viewpoint, zPlane, screenSize, screenDistance, n);
             Transformer3DDriver driver = new Transformer3DDriver(new Scanner(System.in), transformer);
-
-            Dataline[] lines = {
-                new Dataline(-1, 1, -1, 1, 1, -1, "AB"), // AB
-                new Dataline(1, 1, -1, 1, -1, -1, "BC"), // BC
-                new Dataline(1, -1, -1, -1, -1, -1, "CD"), // CD
-                new Dataline(-1, -1, -1, -1, 1, -1, "DA"), // DA
-                new Dataline(-1, 1, 1, 1, 1, 1, "EF"), // EF
-                new Dataline(1, 1, 1, 1, -1, 1, "FG"), // FG
-                new Dataline(1, -1, 1, -1, -1, 1, "GH"), // GH
-                new Dataline(-1, -1, 1, -1, 1, 1, "HE"), // HE
-                new Dataline(-1, 1, -1, -1, 1, 1, "AE"), // AE
-                new Dataline(1, 1, -1, 1, 1, 1, "BF"), // BF
-                new Dataline(1, -1, -1, 1, -1, 1, "CG"), // CG
-                new Dataline(-1, -1, -1, -1, -1, 1, "DH") // DH
-            };
             
 
-            for (Dataline line : lines) {
+            for (Dataline line : DatalineShapes.getPentagonalPyramid()) {
                 transformer.addDataline(line);
             }
             transformer.transformPoints();

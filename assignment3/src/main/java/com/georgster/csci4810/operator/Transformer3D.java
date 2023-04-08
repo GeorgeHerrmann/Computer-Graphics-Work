@@ -25,7 +25,6 @@ public class Transformer3D {
     private double xe;
     private double ye;
     private double v;
-    private static int n = 1024;
 
     /**
      * Creates a new Transformer3D which will draw to the given GraphicsContext.
@@ -35,8 +34,9 @@ public class Transformer3D {
      * @param zPlane The z-plane of the camera.
      * @param screenSize The size of the screen.
      * @param screenDistance The distance from the screen to the camera.
+     * @param n The size of the viewport.
      */
-    public Transformer3D(GraphicsContext gc, double[] viewpoint, double zPlane, double screenSize, double screenDistance) {
+    public Transformer3D(GraphicsContext gc, double[] viewpoint, double zPlane, double screenSize, double screenDistance, int n) {
         this.gc = gc;
         this.viewpoint = viewpoint;
         this.zPlane = zPlane;
