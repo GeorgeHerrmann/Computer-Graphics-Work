@@ -1,3 +1,3 @@
-# CSCI4810
+# CSCI4810 Work
 
-Basic repo tracker for all CSCI4810 (Computer Graphics) assignments
+Basic repo showing off my Computer Graphics work for CSCI4810
